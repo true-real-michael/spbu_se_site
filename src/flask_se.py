@@ -378,9 +378,7 @@ app.add_url_rule(
 db.app = app
 db.init_app(app)
 app.config["WHOOSHEE_DIR"] = "whooshee"
-with app.app_context():
-    whooshee.init_app(app)
-    whooshee.reindex()
+whooshee.init_app(app)
 
 # Init Migrate
 migrate = Migrate(app, db, render_as_batch=True)
@@ -711,4 +709,6 @@ if __name__ == "__main__":
             with app.app_context():
                 init_db()
     else:
+        with app.app_context():
+            whooshee.reindex()
         app.run(port=5000, debug=True)
