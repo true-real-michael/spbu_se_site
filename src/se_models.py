@@ -458,7 +458,7 @@ class Courses(db.Model):
         return "<%r>" % (self.name)
 
 
-@whooshee.register_model("name_ru", "name_en", "description", "author", "text")
+@whooshee.register_model("name_ru", "description", "author", "text")
 class Thesis(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
