@@ -107,7 +107,7 @@ def fetch_theses():
 
     if search:
         records = (
-            Thesis.query.msearch(search)
+            Thesis.query.whooshee_search(search)
             .filter(Thesis.temporary == False)
             .filter(Thesis.publish_year >= startdate)
             .filter(Thesis.publish_year <= enddate)

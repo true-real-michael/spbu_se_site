@@ -26,7 +26,6 @@ from flask_se_config import (
 )
 from se_models import (
     db,
-    search,
     init_db,
     Staff,
     Users,
@@ -37,6 +36,7 @@ from se_models import (
     DiplomaThemes,
     CurrentThesis,
     recalculate_post_rank,
+    whooshee,
 )
 from flask_se_auth import (
     login_manager,
@@ -377,14 +377,10 @@ app.add_url_rule(
 # Init Database
 db.app = app
 db.init_app(app)
-
-app.config["MSEARCH_BACKEND"] = "whoosh"
-app.config["MSEARCH_ENABLE"] = True
-search.init_app(app)
-# search.create_index(Thesis, update=True)
-# search.create_index(Users, update=True)
-# search.create_index(Thesis, update=True)
-# search.create_index(Users, update=True)
+app.config["WHOOSHEE_DIR"] = 'whooshee'
+with app.app_context():
+    whooshee.init_app(app)
+    whooshee.reindex()
 
 # Init Migrate
 migrate = Migrate(app, db, render_as_batch=True)

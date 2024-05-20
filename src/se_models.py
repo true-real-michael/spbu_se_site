@@ -12,7 +12,7 @@ from sqlalchemy import MetaData
 from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from flask_msearch import Search
+from flask_whooshee import Whooshee
 from werkzeug.security import generate_password_hash
 from datetime import datetime
 
@@ -35,10 +35,7 @@ convention = {
 
 metadata = MetaData(naming_convention=convention)
 db = SQLAlchemy(metadata=metadata)
-# Workaround: flask-msearch does not work with recent Flask-SQLAlchemy.
-# Pass 'db' parameter explicitly to mitigate this problem.
-search = Search(db=db)
-
+whooshee = Whooshee()
 
 tag = db.Table(
     "tag",
@@ -132,9 +129,8 @@ class Staff(db.Model):
         return self.user.get_name()
 
 
+@whooshee.register_model("first_name", "middle_name", "last_name")
 class Users(db.Model, UserMixin):
-    __searchable__ = ["first_name", "middle_name", "last_name"]
-
     id = db.Column(db.Integer, primary_key=True)
 
     email = db.Column(db.String(255), unique=True, nullable=True)
@@ -462,9 +458,8 @@ class Courses(db.Model):
         return "<%r>" % (self.name)
 
 
+@whooshee.register_model("name_ru", "name_en", "description", "author", "text")
 class Thesis(db.Model):
-    __searchable__ = ["name_ru", "description", "author", "text"]
-
     id = db.Column(db.Integer, primary_key=True)
 
     type_id = db.Column(db.Integer, db.ForeignKey("worktype.id"), nullable=False)
