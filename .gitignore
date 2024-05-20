@@ -103,4 +103,4 @@ src/static/practice/*/*.pdf
 src/static/thesis/*/*.pdf
 
 # Do not track fulltext search files
-src/msearch/*
+src/whooshee/*
