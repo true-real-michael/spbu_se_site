@@ -377,7 +377,7 @@ app.add_url_rule(
 # Init Database
 db.app = app
 db.init_app(app)
-app.config["WHOOSHEE_DIR"] = 'whooshee'
+app.config["WHOOSHEE_DIR"] = "whooshee"
 with app.app_context():
     whooshee.init_app(app)
     whooshee.reindex()
